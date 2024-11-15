@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 İzin Planlayıcı</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #343a40;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #e9ecef;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .day {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            text-align: center;
+            position: relative;
+        }
+        .holiday {
+            background-color: #ffc107;
+        }
+        .leave {
+            background-color: #28a745;
+            color: white;
+        }
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            display: none;
+            z-index: 10;
+        }
+		.calendar {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			margin-top: 20px;
+		}
+
+		.month {
+			width: 33%; /* Her ay için genişlik ayarı */
+			margin-bottom: 20px;
+			border: 1px solid #dee2e6;
+			border-radius: 5px;
+			padding: 10px;
+			background-color: #f8f9fa;
+		}
+
+		.days {
+			display: grid;
+			grid-template-columns: repeat(7, 1fr);
+			gap: 5px; /* Hücreler arasında boşluk */
+		}
+
+		.day {
+			padding: 7px;
+			border: 1px solid #dee2e6;
+			border-radius: 5px;
+			text-align: center;
+			position: relative;
+			height: 50px; /* Her gün için sabit yükseklik */
+			box-sizing: border-box; /* Padding ve border'ı dahil et */
+		}
+
+		.day.header {
+			background-color: #007bff;
+			color: white;
+			font-weight: bold;
+		}
+
+		.day.empty {
+			background-color: transparent;
+		}
+
+		.holiday {
+			background-color: #ffc107;
+		}
+
+		.leave {
+			background-color: #28a745;
+			color: white;
+		}
+		.list-group-item {
+			background-color: #e9ecef; /* Açık gri arka plan */
+			border: 1px solid #dee2e6; /* Kenar rengi */
+			border-radius: 5px; /* Köşe yuvarlama */
+			margin-bottom: 10px; /* Alt boşluk */
+			padding: 15px; /* İç boşluk */
+			font-size: 1.1em; /* Yazı boyutu */
+		}
+
+		.list-group-item strong {
+			color: #007bff; /* Vurgu rengi */
+		}
+		.weekend {
+			background-color: #ffcc80; /* Açık turuncu arka plan rengi */
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">2025 İzin Planlayıcı</h1>
+        <form method="POST" class="mt-4">
+            <div class="mt-4 text-center">
+				<p>🔗 Bu proje, <a href="https://github.com/tolgakurtuluss/izin-hesaplama-webapp" target="_blank">GitHub - tolgakurtuluss/izin-hesaplama-webapp</a> reposunda açık kaynaklı olarak paylaşılmıştır.<br><a href="https://github.com/ubaranzorlu/izin-hesaplama" target="_blank">GitHub - ubaranzorlu/izin-hesaplama</a> reposu temel alınmıştır.</p>
+				<p>💡 İzin günlerinizi en verimli şekilde planlamak için bu aracı kullanabilirsiniz!</p>
+			</div>
+
+
+            <div class="form-group">
+                <label for="max_leaves">Maksimum izin günü sayısını girin (varsayılan 14):</label>
+                <input type="number" id="max_leaves" name="max_leaves" min="1" max ="100" class="form-control" value="14">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Hesapla</button>
+        </form>
+
+        <!-- New Section: Explanation of the Tool -->
+        <div class="mt-4">
+            <h2>İzin Planlayıcı Hakkında</h2>
+            <p>Bu araç, 2025 yılı için izin günlerinizi en verimli şekilde planlamanıza yardımcı olur. İzin günlerinizi, resmi tatilleri ve hafta sonlarını dikkate alarak en iyi tatil dönemlerini bulmanızı sağlar.</p>
+        </div>
+
+        <!-- New Section: How to Use -->
+        <div class="mt-4">
+            <h2>Kullanım Talimatları</h2>
+            <ol>
+                <li>Maksimum izin günü sayısını girin.</li>
+                <li>"Hesapla" butonuna tıklayın.</li>
+                <li>2025 takviminde önerilen izin günlerini ve tatil dönemlerini görüntüleyin.</li>
+                <li>Uzun hafta sonu ve tatil dönemlerini inceleyin.</li>
+            </ol>
+        </div>
+
+        {% if proposed_leaves or total_holidays %}
+			<h2 class="mt-4 text-center">2025 Takvimi</h2>
+			<div class="calendar">
+				{% set month_names = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"] %}
+				
+				{% for month in range(1, 13) %}
+					<div class="month">
+						<h3 class="text-center">{{ month }}. Ay - {{ month_names[month - 1] }}</h3>
+						<div class="days">
+							<div class="day header">Pzt</div>
+							<div class="day header">Sal</div>
+							<div class="day header">Çar</div>
+							<div class="day header">Per</div>
+							<div class="day header">Cum</div>
+							<div class="day header">Cmt</div>
+							<div class="day header">Paz</div>
+							{% set days_in_month = (month == 2 and 28 or [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1]) %}
+							{% set first_day = datetime(2025, month, 1).weekday() %}
+							
+							<!-- Boş hücreler için -->
+							{% for _ in range(first_day) %}
+								<div class="day empty"></div>
+							{% endfor %}
+							
+							{% for day in range(1, days_in_month + 1) %}
+								{% set date = datetime(2025, month, day) %}
+								<div class="day 
+									{% if date in proposed_leaves %}leave{% endif %} 
+									{% if date in all_holidays %}holiday{% endif %} 
+									{% if date.weekday() == 5 or date.weekday() == 6 %}weekend{% endif %}" 
+									data-toggle="tooltip" title="{% if date in proposed_leaves %}İzin Günü{% elif date in all_holidays %}Tatil{% endif %}">
+									{{ day }}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+		
+		{% set month_names = {
+			1: 'Ocak',
+			2: 'Şubat',
+			3: 'Mart',
+			4: 'Nisan',
+			5: 'Mayıs',
+			6: 'Haziran',
+			7: 'Temmuz',
+			8: 'Ağustos',
+			9: 'Eylül',
+			10: 'Ekim',
+			11: 'Kasım',
+			12: 'Aralık'
+		} %}
+
+		{% if consecutive_periods %}
+			<h2 class="mt-4 text-center">🌞 Uzun Hafta Sonu/Tatil Dönemleri:</h2>
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="list-group">
+						{% for period in consecutive_periods %}
+							<li class="list-group-item">
+								<strong>{{ period[0].day }} {{ month_names[period[0].month] }} ile {{ period[-1].day }} {{ month_names[period[-1].month] }} arası:</strong> 
+								{{ (period[-1] - period[0]).days + 1 }} gün
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+
+
+        {% if total_consecutive_days %}
+            <h3 class="mt-4">Toplam ardışık tatil günleri: {{ total_consecutive_days }}</h3>
+        {% endif %}
+
+        {% if total_holidays %}
+            <h3 class="mt-4">2025'te toplam tatil günleri (tüm haftasonları + resmi tatiller + izinler): {{ total_holidays }}</h3>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip({
+                trigger: 'hover',
+                placement: 'top'
+            });
+        });
+    </script>
+</body>
+</html>
