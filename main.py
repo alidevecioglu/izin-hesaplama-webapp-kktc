@@ -8,9 +8,10 @@ holidays = {
     "İşçi Bayramı": "2025-05-01",
     "Gençlik ve Spor Bayramı": "2025-05-19",
     "Kurban Bayramı": ["2025-06-06", "2025-06-07", "2025-06-08", "2025-06-09"],
-    "Demokrasi ve Milli Birlik Günü": "2025-07-15",
+    "Barış ve Özgürlük Bayramı": "2025-07-20",
     "Zafer Bayramı": "2025-08-30",
-    "Cumhuriyet Bayramı": [ "2025-10-29"]
+    "Türkiye Cumhuriyet Bayramı": [ "2025-10-29"],
+    "KKTC Cumhuriyet Bayramı": [ "2025-11-15"]
 }
 
 def str_to_date(date_str):
